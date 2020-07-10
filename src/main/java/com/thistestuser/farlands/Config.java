@@ -79,7 +79,6 @@ public class Config
 			LOGGER.error("[FarLands]: An error occured while trying to load config!");
 			e.printStackTrace();
 		}
-		LOGGER.info("[FarLands] far lands are " + isFarLands);
 	}
 	
 	/**
@@ -130,5 +129,60 @@ public class Config
 	public static double maintainPrecision(double d)
 	{
 		return instance.isFarLands ? d : d - (double)MathHelper.lfloor(d / 3.3554432E7D + 0.5D) * 3.3554432E7D;
+	}
+	
+	public static double adjust6E7D()
+	{
+		return instance.extendWB ? 4294967294D : 6.0E7D;
+	}
+	
+	public static float adjust6E7F()
+	{
+		return instance.extendWB ? 4294967294F : 6.0E7F;
+	}
+	
+	public static int adjust2984()
+	{
+		return instance.extendWB ? Integer.MAX_VALUE : 29999984;
+	}
+	
+	public static double adjust3E7D()
+	{
+		return instance.extendWB ? 2147483647D : 3E7D;
+	}
+	
+	public static double adjustN3E7D()
+	{
+		return instance.extendWB ? -2147483647D : -3E7D;
+	}
+	
+	public static int adjust3E7I()
+	{
+		return instance.extendWB ? Integer.MAX_VALUE : 30000000;
+	}
+	
+	public static int adjustN3E7I()
+	{
+		return instance.extendWB ? Integer.MIN_VALUE : -30000000;
+	}
+	
+	public static double adjust29872D()
+	{
+		return instance.extendWB ? 2147483647D : 2.9999872E7D;
+	}
+	
+	public static int adjust29872I()
+	{
+		return instance.extendWB ? Integer.MAX_VALUE : 29999872;
+	}
+	
+	public static double adjust29D()
+	{
+		return instance.extendWB ? 2147483647D : 29999999D;
+	}
+	
+	public static int adjust29I()
+	{
+		return instance.extendWB ? Integer.MAX_VALUE : 29999999;
 	}
 }
