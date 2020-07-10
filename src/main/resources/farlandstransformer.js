@@ -20,7 +20,8 @@ function initializeCoreMod() {
                         var arrayLength = methodNode.instructions.size();
                         for (var i = 0; i < arrayLength; i++) {
                             var instruction = methodNode.instructions.get(i);
-                            if (instruction.getOpcode() == LDC && instruction.cst == 16777216) {
+                            if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Long"
+                            	&& instruction.cst == 16777216) {
                             	var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
                             		"getModulo", "()J", false);
                                 methodNode.instructions.set(instruction, replace);
@@ -409,32 +410,6 @@ function initializeCoreMod() {
                         	&& instruction.cst == 30000000) {
                         	var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
                         		"adjust3E7I", "()I", false);
-                        	methodNode.instructions.set(instruction, replace);
-                        }
-                    }
-                });
-                return classNode;
-            }
-        },
-        "BlockPos": {
-            "target": {
-                "type": "CLASS",
-                "name": "net.minecraft.util.math.BlockPos",
-            },
-            "transformer": function(classNode) {
-                classNode.methods.forEach(function(methodNode) {
-                	var arrayLength = methodNode.instructions.size();
-                    for (var i = 0; i < arrayLength; i++) {
-                    	var instruction = methodNode.instructions.get(i);
-                        if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer"
-                        	&& instruction.cst == -30000000) {
-                        	var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-                        		"adjustN3E7D", "()I", false);
-                        	methodNode.instructions.set(instruction, replace);
-                        }else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer"
-                        	&& instruction.cst == 30000000) {
-                        	var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-                        		"adjust3E7D", "()I", false);
                         	methodNode.instructions.set(instruction, replace);
                         }
                     }

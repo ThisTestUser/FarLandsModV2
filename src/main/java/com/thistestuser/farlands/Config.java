@@ -153,7 +153,7 @@ public class Config
 	
 	public static double adjustN3E7D()
 	{
-		return instance.extendWB ? -2147483647D : -3E7D;
+		return instance.extendWB ? -2147483648D : -3E7D;
 	}
 	
 	public static int adjust3E7I()
