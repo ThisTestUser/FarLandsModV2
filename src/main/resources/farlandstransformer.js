@@ -1,6 +1,7 @@
 function initializeCoreMod() {
     Opcodes = Java.type("org.objectweb.asm.Opcodes");
 	InsnList = Java.type("org.objectweb.asm.tree.InsnList");
+	MethodInsnNode = Java.type("org.objectweb.asm.tree.MethodInsnNode");
 
     LDC = Opcodes.LDC;
 	INVOKESTATIC = Opcodes.INVOKESTATIC;
@@ -20,7 +21,9 @@ function initializeCoreMod() {
                         for (var i = 0; i < arrayLength; i++) {
                             var instruction = methodNode.instructions.get(i);
                             if (instruction.getOpcode() == LDC && instruction.cst == 16777216) {
-                                instruction.cst = 9223372036854775808;
+                            	var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
+                            		"getModulo", "()J", false);
+                                method.instructions.set(INVOKESTATIC, replace);
 								pass = true;
                             }
                         }

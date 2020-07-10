@@ -121,6 +121,11 @@ public class Config
 			return 0;
 		}
 	}
+
+	public static long getModulo()
+	{
+		return instance.isFarLands ? Long.MAX_VALUE : 16777216L;
+	}
 	
 	public static double maintainPrecision(double d)
 	{
