@@ -173,11 +173,6 @@ public class Config
 		return instance.extendWB ? 2147483647D : 2.9999872E7D;
 	}
 	
-	public static int adjust29872I()
-	{
-		return instance.extendWB ? Integer.MAX_VALUE : 29999872;
-	}
-	
 	public static double adjust29D()
 	{
 		return instance.extendWB ? 2147483647D : 29999999D;

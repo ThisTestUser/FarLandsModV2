@@ -16,35 +16,6 @@ function initializeCoreMod() {
 	ISUB = Opcodes.ISUB;
 
 	return {
-		//1.13
-		"OldNoiseOcto": {
-			"target": {
-				"type": "CLASS",
-				"name": "net.minecraft.world.gen.NoiseGeneratorOctaves",
-			},
-			"transformer": function(classNode) {
-				classNode.methods.forEach(function(methodNode) {
-					if (methodNode.desc === "([DIIIIIIDDD)[D") {
-						var pass = false;
-						var arrayLength = methodNode.instructions.size();
-						for (var i = 0; i < arrayLength; i++) {
-							var instruction = methodNode.instructions.get(i);
-							if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Long" &&
-								instruction.cst == 16777216) {
-								var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-									"getModulo", "()J", false);
-								methodNode.instructions.set(instruction, replace);
-								pass = true;
-							}
-						}
-						if (pass)
-							print("[FarLands] Noise generator hooked succesfully!");
-					}
-				});
-				return classNode;
-			}
-		},
-		//1.14+ (part 1)
 		"NewNoiseOcto": {
 			"target": {
 				"type": "CLASS",
@@ -72,7 +43,6 @@ function initializeCoreMod() {
 				return classNode;
 			}
 		},
-		//1.14+ (part 2)
 		"NewNoiseOcto2": {
 			"target": {
 				"type": "CLASS",
@@ -256,15 +226,8 @@ function initializeCoreMod() {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust3E7D", "()D", false);
 							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == 29999872) {
-							//1.13
-							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"adjust29872I", "()I", false);
-							methodNode.instructions.set(instruction, replace);
 						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
 							instruction.cst == 29999872) {
-							//1.14+
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust29872D", "()D", false);
 							methodNode.instructions.set(instruction, replace);
@@ -274,29 +237,6 @@ function initializeCoreMod() {
 				return classNode;
 			}
 		},
-		//1.13
-		"NetHandlerPlayServer": {
-			"target": {
-				"type": "CLASS",
-				"name": "net.minecraft.network.NetHandlerPlayServer",
-			},
-			"transformer": function(classNode) {
-				classNode.methods.forEach(function(methodNode) {
-					var arrayLength = methodNode.instructions.size();
-					for (var i = 0; i < arrayLength; i++) {
-						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
-							instruction.cst == 30000000) {
-							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"adjust3E7D", "()D", false);
-							methodNode.instructions.set(instruction, replace);
-						}
-					}
-				});
-				return classNode;
-			}
-		},
-		//1.14+
 		"ServerPlayNetHandler": {
 			"target": {
 				"type": "CLASS",
@@ -345,61 +285,6 @@ function initializeCoreMod() {
 				return classNode;
 			}
 		},
-		//1.13
-		"IWorldReaderBase": {
-			"target": {
-				"type": "CLASS",
-				"name": "net.minecraft.world.IWorldReaderBase",
-			},
-			"transformer": function(classNode) {
-				classNode.methods.forEach(function(methodNode) {
-					var arrayLength = methodNode.instructions.size();
-					for (var i = 0; i < arrayLength; i++) {
-						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == -30000000) {
-							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"adjustN3E7I", "()I", false);
-							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == 30000000) {
-							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"adjust3E7I", "()I", false);
-							methodNode.instructions.set(instruction, replace);
-						}
-					}
-				});
-				return classNode;
-			}
-		},
-		//1.13
-		"Region": {
-			"target": {
-				"type": "CLASS",
-				"name": "net.minecraft.world.Region",
-			},
-			"transformer": function(classNode) {
-				classNode.methods.forEach(function(methodNode) {
-					var arrayLength = methodNode.instructions.size();
-					for (var i = 0; i < arrayLength; i++) {
-						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == -30000000) {
-							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"adjustN3E7I", "()I", false);
-							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == 30000000) {
-							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"adjust3E7I", "()I", false);
-							methodNode.instructions.set(instruction, replace);
-						}
-					}
-				});
-				return classNode;
-			}
-		},
-		//1.14+
 		"IWorldReader": {
 			"target": {
 				"type": "CLASS",
@@ -478,34 +363,6 @@ function initializeCoreMod() {
 				return classNode;
 			}
 		},
-		//1.13
-		"EntityPlayer": {
-			"target": {
-				"type": "CLASS",
-				"name": "net.minecraft.entity.player.EntityPlayer",
-			},
-			"transformer": function(classNode) {
-				classNode.methods.forEach(function(methodNode) {
-					var arrayLength = methodNode.instructions.size();
-					for (var i = 0; i < arrayLength; i++) {
-						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
-							instruction.cst == 29999999) {
-							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"adjust29D", "()D", false);
-							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == 29999999) {
-							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"adjust29I", "()I", false);
-							methodNode.instructions.set(instruction, replace);
-						}
-					}
-				});
-				return classNode;
-			}
-		},
-		//1.14+
 		"PlayerEntity": {
 			"target": {
 				"type": "CLASS",
@@ -532,29 +389,6 @@ function initializeCoreMod() {
 				return classNode;
 			}
 		},
-		//1.13
-		"PlayerList": {
-			"target": {
-				"type": "CLASS",
-				"name": "net.minecraft.server.management.PlayerList",
-			},
-			"transformer": function(classNode) {
-				classNode.methods.forEach(function(methodNode) {
-					var arrayLength = methodNode.instructions.size();
-					for (var i = 0; i < arrayLength; i++) {
-						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == 29999872) {
-							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"adjust29872I", "()I", false);
-							methodNode.instructions.set(instruction, replace);
-						}
-					}
-				});
-				return classNode;
-			}
-		},
-		//1.14+
 		"ServerPlayerEntity": {
 			"target": {
 				"type": "CLASS",
@@ -615,72 +449,6 @@ function initializeCoreMod() {
 				return classNode;
 			}
 		},
-		//1.13
-		"AbstractChunkGenerator": {
-			"target": {
-				"type": "CLASS",
-				"name": "net.minecraft.world.gen.AbstractChunkGenerator",
-			},
-			"transformer": function(classNode) {
-				classNode.methods.forEach(function(methodNode) {
-					offsetChunkPos(methodNode);
-				});
-				return classNode;
-			}
-		},
-		//1.13
-		"SetBlocksInChunk": {
-			"target": {
-				"type": "METHOD",
-				"class": "net.minecraft.world.gen.ChunkGeneratorOverworld",
-				"methodName": "func_185976_a",
-				"methodDesc": "(IILnet/minecraft/world/chunk/IChunk;)V",
-			},
-			"transformer": function(methodNode) {
-				offsetChunkPos(methodNode);
-				return methodNode;
-			}
-		},
-		//1.13
-		"MakeBaseOld": {
-			"target": {
-				"type": "METHOD",
-				"class": "net.minecraft.world.gen.ChunkGeneratorOverworld",
-				"methodName": "func_202088_a",
-				"methodDesc": "(Lnet/minecraft/world/chunk/IChunk;)V",
-			},
-			"transformer": function(methodNode) {
-				offsetChunkPos(methodNode);
-				return methodNode;
-			}
-		},
-		//1.13
-		"ChunkGeneratorNether": {
-			"target": {
-				"type": "METHOD",
-				"class": "net.minecraft.world.gen.ChunkGeneratorNether",
-				"methodName": "func_202088_a",
-				"methodDesc": "(Lnet/minecraft/world/chunk/IChunk;)V",
-			},
-			"transformer": function(methodNode) {
-				offsetChunkPos(methodNode);
-				return methodNode;
-			}
-		},
-		//1.13
-		"ChunkGeneratorEnd": {
-			"target": {
-				"type": "METHOD",
-				"class": "net.minecraft.world.gen.ChunkGeneratorEnd",
-				"methodName": "func_202088_a",
-				"methodDesc": "(Lnet/minecraft/world/chunk/IChunk;)V",
-			},
-			"transformer": function(methodNode) {
-				offsetChunkPos(methodNode);
-				return methodNode;
-			}
-		},
-		//1.14+
 		"GenerateSurface": {
 			"target": {
 				"type": "METHOD",
@@ -725,7 +493,6 @@ function initializeCoreMod() {
 				return methodNode;
 			}
 		},
-		//1.14+
 		"MakeBase": {
 			"target": {
 				"type": "METHOD",
