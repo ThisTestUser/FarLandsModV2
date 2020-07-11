@@ -35,7 +35,7 @@ public class Config
 	 */
 	private static final File config = new File("config/farlandsmod.cfg");
 	private static final Logger LOGGER = LogManager.getLogger();
-	public static Config instance;
+	private static Config instance;
 	
 	public static void setup()
 	{
@@ -94,11 +94,13 @@ public class Config
 			writer.println("farlands:" + isFarLands);
 			writer.println("#Should we extend the world border?");
 			writer.println("extendwb:" + extendWB);
-			writer.println("#Should we offset the terrain (offsetX and offsetZ will not do anything when this is false)? This applies to the overworld only!");
+			writer.println("#Should we offset the terrain?");
+			writer.println("#offestX and offsetZ will not do anything if this is false");
+			writer.println("#Terrain features will have some differences when compared to the original terrain");
 			writer.println("offset:" + offset);
-			writer.println("#Note: The offset is written in chunk coordinates, so please divide the value you want by 16!");
+			writer.println("#Note: The offsets are written in chunk coordinates, so please divide the value you want by 16!");
 			writer.println("#Example: If offsetX and offsetZ are both set to 100, the center of the map will generate terrain at 1600,1600.");
-			writer.println("#Do not put a value outside of the integer limit (-2147483648 to 2147483647)!");
+			writer.println("#Do not put values outside of the integer limit (-2147483648 to 2147483647)!");
 			writer.println("offsetX:" + offsetX);
 			writer.println("offsetZ:" + offsetZ);
 			writer.close();
@@ -184,5 +186,25 @@ public class Config
 	public static int adjust29I()
 	{
 		return instance.extendWB ? Integer.MAX_VALUE : 29999999;
+	}
+	
+	public static int getOffsetXM()
+	{
+		return instance.offset ? instance.offsetX * 16 : 0;
+	}
+	
+	public static int adjust29ZM()
+	{
+		return instance.offset ? instance.offsetZ * 16 : 0;
+	}
+	
+	public static int getOffsetX()
+	{
+		return instance.offset ? instance.offsetX : 0;
+	}
+	
+	public static int adjust29Z()
+	{
+		return instance.offset ? instance.offsetZ : 0;
 	}
 }
