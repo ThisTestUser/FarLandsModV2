@@ -731,10 +731,30 @@ function initializeCoreMod() {
 				"type": "METHOD",
 				"class": "net.minecraft.world.gen.NoiseChunkGenerator",
 				"methodName": "func_222537_b",
-				"methodDesc": "(Lnet/minecraft/world/chunk/IChunk;)V",
+				"methodDesc": "(Lnet/minecraft/world/IWorld;Lnet/minecraft/world/chunk/IChunk;)V",
 			},
 			"transformer": function(methodNode) {
-				offsetChunkPos(methodNode);
+				var arrayLength = methodNode.instructions.size();
+				var foundX = false;
+				var foundZ = false;
+				for (var i = 0; i < arrayLength; i++) {
+					var instruction = methodNode.instructions.get(i);
+					if (!foundX && instruction.getOpcode() == GETFIELD && instruction.owner.equals("net/minecraft/util/math/ChunkPos") &&
+						instruction.name.equals(ASMAPI.mapField("field_77276_a"))) {
+						var list = new InsnList();
+						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetX", "()I", false));
+						list.add(new InsnNode(IADD));
+						methodNode.instructions.insert(instruction, list);
+						foundX = true;
+					} else if (!foundZ && instruction.getOpcode() == GETFIELD && instruction.owner.equals("net/minecraft/util/math/ChunkPos") &&
+						instruction.name.equals(ASMAPI.mapField("field_77275_b"))) {
+						var list = new InsnList();
+						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetZ", "()I", false));
+						list.add(new InsnNode(IADD));
+						methodNode.instructions.insert(instruction, list);
+						foundZ = true;
+					}
+				}
 				return methodNode;
 			}
 		},

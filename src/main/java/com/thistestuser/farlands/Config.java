@@ -193,7 +193,7 @@ public class Config
 		return instance.offset ? instance.offsetX * 16 : 0;
 	}
 	
-	public static int adjust29ZM()
+	public static int getOffsetZM()
 	{
 		return instance.offset ? instance.offsetZ * 16 : 0;
 	}
@@ -203,7 +203,7 @@ public class Config
 		return instance.offset ? instance.offsetX : 0;
 	}
 	
-	public static int adjust29Z()
+	public static int getOffsetZ()
 	{
 		return instance.offset ? instance.offsetZ : 0;
 	}
