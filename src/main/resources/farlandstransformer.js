@@ -589,22 +589,22 @@ function initializeCoreMod() {
 						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 							"getOffsetXM", "()I", false));
 						list.add(new InsnNode(IADD));
-						list.add(new VarInsnNode(ISTORE, 4));
-						list.add(new VarInsnNode(ILOAD, 3));
+						list.add(new VarInsnNode(ISTORE, 3));
+						list.add(new VarInsnNode(ILOAD, 4));
 						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 							"getOffsetZM", "()I", false));
 						list.add(new InsnNode(IADD));
 						list.add(new VarInsnNode(ISTORE, 4));
 						methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), list);
-					} else if (methodNode.name.equals(ASMAPI.mapMethod("func_202426_b")) || methodNode.name.equals(ASMAPI.mapMethod("func_202425_c")) ||
+					} else if (methodNode.name.equals(ASMAPI.mapMethod("func_202425_c")) ||
 						methodNode.name.equals(ASMAPI.mapMethod("func_202427_a"))) {
 						var list = new InsnList();
 						list.add(new VarInsnNode(ILOAD, 3));
 						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 							"getOffsetX", "()I", false));
 						list.add(new InsnNode(IADD));
-						list.add(new VarInsnNode(ISTORE, 4));
-						list.add(new VarInsnNode(ILOAD, 3));
+						list.add(new VarInsnNode(ISTORE, 3));
+						list.add(new VarInsnNode(ILOAD, 4));
 						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 							"getOffsetZ", "()I", false));
 						list.add(new InsnNode(IADD));
