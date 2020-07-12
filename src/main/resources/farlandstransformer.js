@@ -4,6 +4,7 @@ function initializeCoreMod() {
 	MethodInsnNode = Java.type("org.objectweb.asm.tree.MethodInsnNode");
 	InsnNode = Java.type("org.objectweb.asm.tree.InsnNode");
 	VarInsnNode = Java.type("org.objectweb.asm.tree.VarInsnNode");
+	LdcInsnNode = Java.type("org.objectweb.asm.tree.LdcInsnNode");
 	ASMAPI = Java.type("net.minecraftforge.coremod.api.ASMAPI");
 
 	LDC = Opcodes.LDC;
@@ -77,16 +78,18 @@ function initializeCoreMod() {
 				"name": "net.minecraft.command.impl.WorldBorderCommand",
 			},
 			"transformer": function(classNode) {
+				var double_ldc = new LdcInsnNode(0.5);
+				var integer_ldc = new LdcInsnNode(123);
 				classNode.methods.forEach(function(methodNode) {
 					var arrayLength = methodNode.instructions.size();
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
+						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == double_ldc.cst.getClass() &&
 							instruction.cst == 60000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust6E7D", "()D", false);
 							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Float" &&
+						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() != integer_ldc.cst.getClass() &&
 							instruction.cst == 60000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust6E7F", "()F", false);
@@ -107,13 +110,11 @@ function initializeCoreMod() {
 					var arrayLength = methodNode.instructions.size();
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
-							instruction.cst == 60000000) {
+						if (instruction.getOpcode() == LDC && instruction.cst == 60000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust6E7D", "()D", false);
 							methodNode.instructions.set(instruction, replace);
-						}else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == 29999984) {
+						}else if (instruction.getOpcode() == LDC && instruction.cst == 29999984) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust2984", "()I", false);
 							methodNode.instructions.set(instruction, replace);
@@ -133,8 +134,7 @@ function initializeCoreMod() {
 					var arrayLength = methodNode.instructions.size();
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
-							instruction.cst == 60000000) {
+						if (instruction.getOpcode() == LDC && instruction.cst == 60000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust6E7D", "()D", false);
 							methodNode.instructions.set(instruction, replace);
@@ -154,8 +154,7 @@ function initializeCoreMod() {
 					var arrayLength = methodNode.instructions.size();
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == 29999984) {
+						if (instruction.getOpcode() == LDC && instruction.cst == 29999984) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust2984", "()I", false);
 							methodNode.instructions.set(instruction, replace);
@@ -175,8 +174,7 @@ function initializeCoreMod() {
 					var arrayLength = methodNode.instructions.size();
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == 29999984) {
+						if (instruction.getOpcode() == LDC && instruction.cst == 29999984) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust2984", "()I", false);
 							methodNode.instructions.set(instruction, replace);
@@ -196,18 +194,15 @@ function initializeCoreMod() {
 					var arrayLength = methodNode.instructions.size();
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
-							instruction.cst == -30000000) {
+						if (instruction.getOpcode() == LDC && instruction.cst == -30000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjustN3E7D", "()D", false);
 							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
-							instruction.cst == 30000000) {
+						} else if (instruction.getOpcode() == LDC && instruction.cst == 30000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust3E7D", "()D", false);
 							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
-							instruction.cst == 29999872) {
+						} else if (instruction.getOpcode() == LDC && instruction.cst == 29999872) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust29872D", "()D", false);
 							methodNode.instructions.set(instruction, replace);
@@ -227,8 +222,7 @@ function initializeCoreMod() {
 					var arrayLength = methodNode.instructions.size();
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
-							instruction.cst == 30000000) {
+						if (instruction.getOpcode() == LDC && instruction.cst == 30000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust3E7D", "()D", false);
 							methodNode.instructions.set(instruction, replace);
@@ -248,13 +242,11 @@ function initializeCoreMod() {
 					var arrayLength = methodNode.instructions.size();
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == -30000000) {
+						if (instruction.getOpcode() == LDC && instruction.cst == -30000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjustN3E7I", "()I", false);
 							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == 30000000) {
+						} else if (instruction.getOpcode() == LDC && instruction.cst == 30000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust3E7I", "()I", false);
 							methodNode.instructions.set(instruction, replace);
@@ -274,13 +266,11 @@ function initializeCoreMod() {
 					var arrayLength = methodNode.instructions.size();
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == -30000000) {
+						if (instruction.getOpcode() == LDC && instruction.cst == -30000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjustN3E7I", "()I", false);
 							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == 30000000) {
+						} else if (instruction.getOpcode() == LDC && instruction.cst == 30000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust3E7I", "()I", false);
 							methodNode.instructions.set(instruction, replace);
@@ -300,13 +290,11 @@ function initializeCoreMod() {
 					var arrayLength = methodNode.instructions.size();
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == -30000000) {
+						if (instruction.getOpcode() == LDC && instruction.cst == -30000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjustN3E7I", "()I", false);
 							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == 30000000) {
+						} else if (instruction.getOpcode() == LDC && instruction.cst == 30000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust3E7I", "()I", false);
 							methodNode.instructions.set(instruction, replace);
@@ -322,16 +310,18 @@ function initializeCoreMod() {
 				"name": "net.minecraft.entity.player.PlayerEntity",
 			},
 			"transformer": function(classNode) {
+				var double_ldc = new LdcInsnNode(0.5);
+				var integer_ldc = new LdcInsnNode(123);
 				classNode.methods.forEach(function(methodNode) {
 					var arrayLength = methodNode.instructions.size();
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
+						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == double_ldc.cst.getClass() &&
 							instruction.cst == 29999999) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust29D", "()D", false);
 							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
+						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == integer_ldc.cst.getClass() &&
 							instruction.cst == 29999999) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust29I", "()I", false);
@@ -352,8 +342,7 @@ function initializeCoreMod() {
 					var arrayLength = methodNode.instructions.size();
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
-							instruction.cst == 29999872) {
+						if (instruction.getOpcode() == LDC && instruction.cst == 29999872) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust29872D", "()D", false);
 							methodNode.instructions.set(instruction, replace);

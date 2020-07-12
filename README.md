@@ -7,8 +7,3 @@ To download the mod, head to the releases page.
 The first time you load the mod, you will see a config file generate at %mc_dir%/configs/farlandsmod.cfg.
 
 You can use the config file to edit certain features of this mod.
-
-## Notice
-There is currently a lighting glitch when the player ventures too far out. This can be easily fixed by drinking a night vision potion.
-
-The feature to extend the world border does not currently work. This will be fixed in the next release.
