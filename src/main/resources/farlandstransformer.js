@@ -71,7 +71,7 @@ function initializeCoreMod() {
 				return classNode;
 			}
 		},
-		"WB1": {
+		"WBCommand": {
 			"target": {
 				"type": "CLASS",
 				"name": "net.minecraft.command.impl.WorldBorderCommand",
@@ -97,7 +97,7 @@ function initializeCoreMod() {
 				return classNode;
 			}
 		},
-		"WB2": {
+		"WorldBorder": {
 			"target": {
 				"type": "CLASS",
 				"name": "net.minecraft.world.border.WorldBorder",
@@ -112,28 +112,7 @@ function initializeCoreMod() {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust6E7D", "()D", false);
 							methodNode.instructions.set(instruction, replace);
-						}
-					}
-				});
-				return classNode;
-			}
-		},
-		"WB3": {
-			"target": {
-				"type": "CLASS",
-				"name": "net.minecraft.world.storage.WorldInfo",
-			},
-			"transformer": function(classNode) {
-				classNode.methods.forEach(function(methodNode) {
-					var arrayLength = methodNode.instructions.size();
-					for (var i = 0; i < arrayLength; i++) {
-						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Double" &&
-							instruction.cst == 60000000) {
-							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"adjust6E7D", "()D", false);
-							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
+						}else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
 							instruction.cst == 29999984) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust2984", "()I", false);
@@ -144,7 +123,7 @@ function initializeCoreMod() {
 				return classNode;
 			}
 		},
-		"WB3": {
+		"WorldInfo": {
 			"target": {
 				"type": "CLASS",
 				"name": "net.minecraft.world.storage.WorldInfo",
@@ -252,33 +231,6 @@ function initializeCoreMod() {
 							instruction.cst == 30000000) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust3E7D", "()D", false);
-							methodNode.instructions.set(instruction, replace);
-						}
-					}
-				});
-				return classNode;
-			}
-		},
-		//1.13
-		"RenderChunkCache": {
-			"target": {
-				"type": "CLASS",
-				"name": "net.minecraft.client.renderer.chunk.RenderChunkCache",
-			},
-			"transformer": function(classNode) {
-				classNode.methods.forEach(function(methodNode) {
-					var arrayLength = methodNode.instructions.size();
-					for (var i = 0; i < arrayLength; i++) {
-						var instruction = methodNode.instructions.get(i);
-						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == -30000000) {
-							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"adjustN3E7I", "()I", false);
-							methodNode.instructions.set(instruction, replace);
-						} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == "class java.lang.Integer" &&
-							instruction.cst == 30000000) {
-							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"adjust3E7I", "()I", false);
 							methodNode.instructions.set(instruction, replace);
 						}
 					}
