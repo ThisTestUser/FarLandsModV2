@@ -576,7 +576,6 @@ function initializeCoreMod() {
 							list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetXM4", "()I", false));
 						list.add(new InsnNode(IADD));
 						methodNode.instructions.insert(instruction, list);
-						print("[Farlands] Testing123");
 						passOne = true;
 					}
 				}
