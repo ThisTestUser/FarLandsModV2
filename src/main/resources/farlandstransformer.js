@@ -14,6 +14,7 @@ function initializeCoreMod() {
 	ISTORE = Opcodes.ISTORE;
 	IADD = Opcodes.IADD;
 	ISUB = Opcodes.ISUB;
+	ISHL = Opcodes.ISHL;
 
 	return {
 		"NewNoiseOcto": {
@@ -502,24 +503,34 @@ function initializeCoreMod() {
 			},
 			"transformer": function(methodNode) {
 				var arrayLength = methodNode.instructions.size();
-				var foundX = false;
-				var foundZ = false;
+				var xLoc = -1;
+				var zLoc = -1;
+				var shiftCount = 0;
 				for (var i = 0; i < arrayLength; i++) {
 					var instruction = methodNode.instructions.get(i);
-					if (!foundX && instruction.getOpcode() == GETFIELD && instruction.owner.equals("net/minecraft/util/math/ChunkPos") &&
+					if (instruction.getOpcode() == GETFIELD && instruction.owner.equals("net/minecraft/util/math/ChunkPos") &&
 						instruction.name.equals(ASMAPI.mapField("field_77276_a"))) {
-						var list = new InsnList();
-						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetX", "()I", false));
-						list.add(new InsnNode(IADD));
-						methodNode.instructions.insert(instruction, list);
-						foundX = true;
-					} else if (!foundZ && instruction.getOpcode() == GETFIELD && instruction.owner.equals("net/minecraft/util/math/ChunkPos") &&
+						xLoc = instruction.getNext().var;
+					} else if (instruction.getOpcode() == GETFIELD && instruction.owner.equals("net/minecraft/util/math/ChunkPos") &&
 						instruction.name.equals(ASMAPI.mapField("field_77275_b"))) {
-						var list = new InsnList();
-						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetZ", "()I", false));
-						list.add(new InsnNode(IADD));
-						methodNode.instructions.insert(instruction, list);
-						foundZ = true;
+						zLoc = instruction.getNext().var;
+					} else if (instruction.getOpcode() == ISHL && xLoc != -1 && zLoc != -1) {
+						shiftCount++;
+						if(shiftCount > 1) {
+							var list = new InsnList();
+							list.add(new VarInsnNode(ILOAD, xLoc));
+							list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
+								"getOffsetX", "()I", false));
+							list.add(new InsnNode(IADD));
+							list.add(new VarInsnNode(ISTORE, xLoc));
+							list.add(new VarInsnNode(ILOAD, zLoc));
+							list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
+								"getOffsetZ", "()I", false));
+							list.add(new InsnNode(IADD));
+							list.add(new VarInsnNode(ISTORE, zLoc));
+							methodNode.instructions.insert(instruction, list);
+							break;
+						}
 					}
 				}
 				return methodNode;
