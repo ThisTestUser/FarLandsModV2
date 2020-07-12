@@ -193,6 +193,16 @@ public class Config
 		return instance.offset ? instance.offsetZ * 16 : 0;
 	}
 	
+	public static int getOffsetXM4()
+	{
+		return instance.offset ? instance.offsetX * 4: 0;
+	}
+	
+	public static int getOffsetZM4()
+	{
+		return instance.offset ? instance.offsetZ * 4: 0;
+	}
+	
 	public static int getOffsetX()
 	{
 		return instance.offset ? instance.offsetX : 0;

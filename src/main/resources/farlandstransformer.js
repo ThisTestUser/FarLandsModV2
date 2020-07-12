@@ -477,6 +477,48 @@ function initializeCoreMod() {
 				return methodNode;
 			}
 		},
+		"MakeBase116": {
+			"target": {
+				"type": "METHOD",
+				"class": "net.minecraft.world.gen.NoiseChunkGenerator",
+				"methodName": "func_230352_b_",
+				"methodDesc": "(Lnet/minecraft/world/IWorld;Lnet/minecraft/world/gen/feature/structure/StructureManager;Lnet/minecraft/world/chunk/IChunk;)V",
+			},
+			"transformer": function(methodNode) {
+				var arrayLength = methodNode.instructions.size();
+				var xLoc = -1;
+				var zLoc = -1;
+				var shiftCount = 0;
+				for (var i = 0; i < arrayLength; i++) {
+					var instruction = methodNode.instructions.get(i);
+					if (instruction.getOpcode() == GETFIELD && instruction.owner.equals("net/minecraft/util/math/ChunkPos") &&
+						instruction.name.equals(ASMAPI.mapField("field_77276_a"))) {
+						xLoc = instruction.getNext().var;
+					} else if (instruction.getOpcode() == GETFIELD && instruction.owner.equals("net/minecraft/util/math/ChunkPos") &&
+						instruction.name.equals(ASMAPI.mapField("field_77275_b"))) {
+						zLoc = instruction.getNext().var;
+					} else if (instruction.getOpcode() == ISHL && xLoc != -1 && zLoc != -1) {
+						shiftCount++;
+						if(shiftCount > 1) {
+							var list = new InsnList();
+							list.add(new VarInsnNode(ILOAD, xLoc));
+							list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
+								"getOffsetX", "()I", false));
+							list.add(new InsnNode(IADD));
+							list.add(new VarInsnNode(ISTORE, xLoc));
+							list.add(new VarInsnNode(ILOAD, zLoc));
+							list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
+								"getOffsetZ", "()I", false));
+							list.add(new InsnNode(IADD));
+							list.add(new VarInsnNode(ISTORE, zLoc));
+							methodNode.instructions.insert(instruction, list);
+							break;
+						}
+					}
+				}
+				return methodNode;
+			}
+		},
 		//1.15+ (not needed for 1.14)
 		"BiomeContainer": {
 			"target": {
@@ -508,6 +550,37 @@ function initializeCoreMod() {
 					}
 				});
 				return classNode;
+			}
+		},
+		//1.16+ only
+		"ChunkGenerator": {
+			"target": {
+				"type": "METHOD",
+				"class": "net.minecraft.world.gen.ChunkGenerator",
+				"methodName": "func_230351_a_",
+				"methodDesc": "(Lnet/minecraft/world/gen/WorldGenRegion;Lnet/minecraft/world/gen/feature/structure/StructureManager;)V",
+			},
+			"transformer": function(methodNode) {
+				var arrayLength = methodNode.instructions.size();
+				var xLoc = -1;
+				var zLoc = -1;
+				var shiftCount = 0;
+				for (var i = 0; i < arrayLength; i++) {
+					var instruction = methodNode.instructions.get(i);
+					var passOne = false;
+					if (instruction.getOpcode() == ISHL) {
+						var list = new InsnList();
+						if(passOne)
+							list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetZM4", "()I", false));
+						else
+							list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetXM4", "()I", false));
+						list.add(new InsnNode(IADD));
+						methodNode.instructions.insert(instruction, list);
+						print("[Farlands] Testing123");
+						passOne = true;
+					}
+				}
+				return methodNode;
 			}
 		}
 	};
