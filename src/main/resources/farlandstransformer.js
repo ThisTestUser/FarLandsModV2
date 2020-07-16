@@ -274,6 +274,14 @@ function initializeCoreMod() {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust3E7I", "()I", false);
 							methodNode.instructions.set(instruction, replace);
+						}else if (instruction.getOpcode() == LDC && instruction.cst == -20000000) {
+							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
+								"adjustN2E7I", "()I", false);
+							methodNode.instructions.set(instruction, replace);
+						} else if (instruction.getOpcode() == LDC && instruction.cst == 20000000) {
+							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
+								"adjust2E7I", "()I", false);
+							methodNode.instructions.set(instruction, replace);
 						}
 					}
 				});
@@ -317,6 +325,11 @@ function initializeCoreMod() {
 					for (var i = 0; i < arrayLength; i++) {
 						var instruction = methodNode.instructions.get(i);
 						if (instruction.getOpcode() == LDC && instruction.cst.getClass() == double_ldc.cst.getClass() &&
+							instruction.cst == -29999999) {
+							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
+								"adjustN29D", "()D", false);
+							methodNode.instructions.set(instruction, replace);
+						}else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == double_ldc.cst.getClass() &&
 							instruction.cst == 29999999) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust29D", "()D", false);

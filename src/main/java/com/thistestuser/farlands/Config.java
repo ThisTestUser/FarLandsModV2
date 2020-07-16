@@ -123,11 +123,6 @@ public class Config
 		}
 	}
 
-	public static long getModulo()
-	{
-		return instance.isFarLands ? Long.MAX_VALUE : 16777216L;
-	}
-	
 	public static double maintainPrecision(double d)
 	{
 		return instance.isFarLands ? d : d - (double)MathHelper.lfloor(d / 3.3554432E7D + 0.5D) * 3.3554432E7D;
@@ -168,6 +163,16 @@ public class Config
 		return instance.extendWB ? Integer.MIN_VALUE : -30000000;
 	}
 	
+	public static int adjust2E7I()
+	{
+		return instance.extendWB ? Integer.MAX_VALUE : 20000000;
+	}
+	
+	public static int adjustN2E7I()
+	{
+		return instance.extendWB ? Integer.MIN_VALUE : -20000000;
+	}
+	
 	public static double adjust29872D()
 	{
 		return instance.extendWB ? 2147483647D : 2.9999872E7D;
@@ -176,6 +181,11 @@ public class Config
 	public static double adjust29D()
 	{
 		return instance.extendWB ? 2147483647D : 29999999D;
+	}
+	
+	public static double adjustN29D()
+	{
+		return instance.extendWB ? -2147483648D : -29999999D;
 	}
 	
 	public static int adjust29I()
