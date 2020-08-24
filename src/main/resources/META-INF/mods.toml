@@ -1,6 +1,7 @@
 modLoader="javafml"
 loaderVersion="[26,)"
 issueTrackerURL="https://github.com/ThisTestUser/FarLandsModV2/issues"
+license="All Rights Reserved"
 [[mods]]
 modId="farlandsmod"
 version="${file.jarVersion}"
