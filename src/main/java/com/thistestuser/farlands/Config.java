@@ -8,8 +8,6 @@ import java.io.PrintWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.util.math.MathHelper;
-
 public class Config
 {
 	/**
@@ -125,7 +123,23 @@ public class Config
 
 	public static double maintainPrecision(double d)
 	{
-		return instance.isFarLands ? d : d - (double)MathHelper.lfloor(d / 3.3554432E7D + 0.5D) * 3.3554432E7D;
+		return instance.isFarLands ? d : d - (double)lfloor(d / 3.3554432E7D + 0.5D) * 3.3554432E7D;
+	}
+	
+	private static long lfloor(double value)
+	{
+		long i = (long)value;
+		return value < (double)i ? i - 1L : i;
+	}
+	
+	public static double adjustN5968D()
+	{
+		return instance.extendWB ? -4294967294D : -59999968D;
+	}
+	
+	public static double adjust5968D()
+	{
+		return instance.extendWB ? 4294967294D : 59999968D;
 	}
 	
 	public static double adjust6E7D()
@@ -176,6 +190,11 @@ public class Config
 	public static double adjust29872D()
 	{
 		return instance.extendWB ? 2147483647D : 2.9999872E7D;
+	}
+	
+	public static double adjustN29872D()
+	{
+		return instance.extendWB ? -2147483647D : -2.9999872E7D;
 	}
 	
 	public static double adjust29D()
