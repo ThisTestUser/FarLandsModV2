@@ -177,6 +177,16 @@ public class Config
 		return instance.extendWB ? Integer.MIN_VALUE : -30000000;
 	}
 	
+	public static double adjust2E7D()
+	{
+		return instance.extendWB ? Integer.MAX_VALUE : 2E7D;
+	}
+	
+	public static double adjustN2E7D()
+	{
+		return instance.extendWB ? -Integer.MIN_VALUE : -2E7D;
+	}
+	
 	public static int adjust2E7I()
 	{
 		return instance.extendWB ? Integer.MAX_VALUE : 20000000;

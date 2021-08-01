@@ -575,9 +575,6 @@ function initializeCoreMod() {
 			},
 			"transformer": function(methodNode) {
 				var arrayLength = methodNode.instructions.size();
-				var xLoc = -1;
-				var zLoc = -1;
-				var shiftCount = 0;
 				for (var i = 0; i < arrayLength; i++) {
 					var instruction = methodNode.instructions.get(i);
 					var passOne = false;
