@@ -500,6 +500,4 @@ function initializeCoreMod() {
 			}
 		}
 	};
-	};
-}
 }
