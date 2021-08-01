@@ -28,11 +28,11 @@ function initializeCoreMod() {
 		"NewNoiseOcto": {
 			"target": {
 				"type": "CLASS",
-				"name": "net.minecraft.level.levelgen.synth.BlendedNoise",
+				"name": "net.minecraft.world.level.levelgen.synth.BlendedNoise",
 			},
 			"transformer": function(classNode) {
 				classNode.methods.forEach(function(methodNode) {
-					if (methodNode.desc === "(DDDDDZ)D") {
+					if (methodNode.desc === "(IIIDDDD)D") {
 						var pass = false;
 						var arrayLength = methodNode.instructions.size();
 						for (var i = 0; i < arrayLength; i++) {
@@ -41,7 +41,7 @@ function initializeCoreMod() {
 								instruction.owner.equals("net/minecraft/world/level/levelgen/synth/PerlinNoise") &&
 								instruction.desc.equals("(D)D")) {
 								instruction.owner = "com/thistestuser/farlands/Config";
-								instruction.name = "wrap";
+								instruction.name = "maintainPrecision";
 								pass = true;
 							}
 						}
@@ -93,6 +93,10 @@ function initializeCoreMod() {
 						if (instruction.getOpcode() == LDC && instruction.cst == 59999968) {
 							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
 								"adjust5968D", "()D", false);
+							methodNode.instructions.set(instruction, replace);
+						} else if (instruction.getOpcode() == LDC && instruction.cst == 29999984) {
+							var replace = new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
+								"adjust2984", "()I", false);
 							methodNode.instructions.set(instruction, replace);
 						}
 					}
@@ -211,7 +215,7 @@ function initializeCoreMod() {
 		"World": {
 			"target": {
 				"type": "CLASS",
-				"name": "net.minecraft.level.Level",
+				"name": "net.minecraft.world.level.Level",
 			},
 			"transformer": function(classNode) {
 				classNode.methods.forEach(function(methodNode) {
@@ -331,7 +335,7 @@ function initializeCoreMod() {
 						list.add(new InsnNode(IADD));
 						list.add(new VarInsnNode(ISTORE, 4));
 						methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), list);
-					} else if (methodNode.name.equals(ASMAPI.mapMethod("m_158961_")))) {
+					} else if (methodNode.name.equals(ASMAPI.mapMethod("m_158961_"))) {
 						var list = new InsnList();
 						list.add(new VarInsnNode(ILOAD, 3));
 						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
