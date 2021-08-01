@@ -2,6 +2,7 @@ function initializeCoreMod() {
 	Opcodes = Java.type("org.objectweb.asm.Opcodes");
 	InsnList = Java.type("org.objectweb.asm.tree.InsnList");
 	MethodInsnNode = Java.type("org.objectweb.asm.tree.MethodInsnNode");
+	FieldInsnNode = Java.type("org.objectweb.asm.tree.FieldInsnNode");
 	InsnNode = Java.type("org.objectweb.asm.tree.InsnNode");
 	VarInsnNode = Java.type("org.objectweb.asm.tree.VarInsnNode");
 	LdcInsnNode = Java.type("org.objectweb.asm.tree.LdcInsnNode");
@@ -10,13 +11,18 @@ function initializeCoreMod() {
 	LDC = Opcodes.LDC;
 	INVOKESTATIC = Opcodes.INVOKESTATIC;
 	INVOKEVIRTUAL = Opcodes.INVOKEVIRTUAL;
+	INVOKESPECIAL = Opcodes.INVOKESPECIAL;
+	INVOKEINTERFACE = Opcodes.INVOKEINTERFACE;
 	GETFIELD = Opcodes.GETFIELD;
 	ALOAD = Opcodes.ALOAD;
 	ILOAD = Opcodes.ILOAD;
+	ASTORE = Opcodes.ASTORE;
 	ISTORE = Opcodes.ISTORE;
 	IADD = Opcodes.IADD;
 	ISUB = Opcodes.ISUB;
 	ISHL = Opcodes.ISHL;
+	NEW = Opcodes.NEW;
+	DUP = Opcodes.DUP;
 
 	return {
 		"NewNoiseOcto": {
@@ -392,38 +398,30 @@ function initializeCoreMod() {
 				"type": "METHOD",
 				"class": "net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator",
 				"methodName": "m_158427_",
-				"methodDesc": "(Lnet/minecraft/world/IWorld;Lnet/minecraft/world/gen/feature/structure/StructureManager;Lnet/minecraft/world/chunk/IChunk;)V",
+				"methodDesc": "(Lnet/minecraft/world/IWorld;Lnet/minecraft/world/level/chunk/ChunkAccess;II)V",
 			},
 			"transformer": function(methodNode) {
 				var arrayLength = methodNode.instructions.size();
-				var xLoc = -1;
-				var zLoc = -1;
-				var shiftCount = 0;
 				for (var i = 0; i < arrayLength; i++) {
 					var instruction = methodNode.instructions.get(i);
-					if (instruction.getOpcode() == GETFIELD && instruction.owner.equals("net/minecraft/util/math/ChunkPos") &&
-						instruction.name.equals(ASMAPI.mapField("field_77276_a"))) {
-						xLoc = instruction.getNext().var;
-					} else if (instruction.getOpcode() == GETFIELD && instruction.owner.equals("net/minecraft/util/math/ChunkPos") &&
-						instruction.name.equals(ASMAPI.mapField("field_77275_b"))) {
-						zLoc = instruction.getNext().var;
-					} else if (instruction.getOpcode() == ISHL && xLoc != -1 && zLoc != -1) {
-						shiftCount++;
-						if(shiftCount > 1) {
-							var list = new InsnList();
-							list.add(new VarInsnNode(ILOAD, xLoc));
-							list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"getOffsetX", "()I", false));
-							list.add(new InsnNode(IADD));
-							list.add(new VarInsnNode(ISTORE, xLoc));
-							list.add(new VarInsnNode(ILOAD, zLoc));
-							list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-								"getOffsetZ", "()I", false));
-							list.add(new InsnNode(IADD));
-							list.add(new VarInsnNode(ISTORE, zLoc));
-							methodNode.instructions.insert(instruction, list);
-							break;
-						}
+					if (instruction.getOpcode() == INVOKEINTERFACE && instruction.owner.equals("net/minecraft/world/level/chunk/ChunkAccess") &&
+						instruction.name.equals(ASMAPI.mapMethod("m_7697_"))) {
+						var local = instruction.getNext().var;
+						var list = new InsnList();
+						list.add(new TypeInsnNode(NEW, "net/minecraft/world/level/ChunkPos"));
+						list.add(new InsnNode(DUP));
+						list.add(new VarInsnNode(ALOAD, local));
+						list.add(new FieldInsnNode(GETFIELD, "net/minecraft/world/level/ChunkPos", ASMAPI.mapField("f_45578_"), "I"));
+						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetX", "()I", false));
+						list.add(new InsnNode(IADD));
+						list.add(new VarInsnNode(ALOAD, local));
+						list.add(new FieldInsnNode(GETFIELD, "net/minecraft/world/level/ChunkPos", ASMAPI.mapField("f_45579_"), "I"));
+						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetZ", "()I", false));
+						list.add(new InsnNode(IADD));
+						list.add(new MethodInsnNode(INVOKESPECIAL, "net/minecraft/world/level/ChunkPos", "<init>", "(II)V", false));
+						list.add(new VarInsnNode(ASTORE, local));
+						methodNode.instructions.insert(instruction.getNext(), list);
+						break;
 					}
 				}
 				return methodNode;
