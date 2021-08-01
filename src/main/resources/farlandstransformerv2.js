@@ -460,13 +460,9 @@ function initializeCoreMod() {
 			},
 			"transformer": function(methodNode) {
 				var arrayLength = methodNode.instructions.size();
-				var xLoc = -1;
-				var zLoc = -1;
-				var patchedX = false;
-				var patchedZ = false;
 				for (var i = 0; i < arrayLength; i++) {
 					var instruction = methodNode.instructions.get(i);
-					if (instruction.getOpcode() == INVOKEVIRTUAL && instruction.owner.equals("net/minecraft/world/level/chunk/ChunkGenerator") &&
+					if (instruction.getOpcode() == INVOKEVIRTUAL && instruction.owner.equals("net/minecraft/world/level/biome/BiomeSource") &&
 						instruction.name.equals(ASMAPI.mapMethod("m_151754_"))) {
 						var local = instruction.getPrevious().var;
 						var list = new InsnList();
@@ -481,8 +477,8 @@ function initializeCoreMod() {
 						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetZ", "()I", false));
 						list.add(new InsnNode(IADD));
 						list.add(new MethodInsnNode(INVOKESPECIAL, "net/minecraft/world/level/ChunkPos", "<init>", "(II)V", false));
-						methodNode.instructions.insertBefore(instruction, list);
-						methodNode.instructions.remove(instruction);
+						methodNode.instructions.insertBefore(instruction.getPrevious(), list);
+						methodNode.instructions.remove(instruction.getPrevious());
 						break;
 					}
 				}
