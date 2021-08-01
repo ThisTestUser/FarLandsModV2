@@ -3,6 +3,7 @@ function initializeCoreMod() {
 	InsnList = Java.type("org.objectweb.asm.tree.InsnList");
 	MethodInsnNode = Java.type("org.objectweb.asm.tree.MethodInsnNode");
 	FieldInsnNode = Java.type("org.objectweb.asm.tree.FieldInsnNode");
+	TypeInsnNode = Java.type("org.objectweb.asm.tree.TypeInsnNode");
 	InsnNode = Java.type("org.objectweb.asm.tree.InsnNode");
 	VarInsnNode = Java.type("org.objectweb.asm.tree.VarInsnNode");
 	LdcInsnNode = Java.type("org.objectweb.asm.tree.LdcInsnNode");
@@ -389,7 +390,7 @@ function initializeCoreMod() {
 				"type": "METHOD",
 				"class": "net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator",
 				"methodName": "m_158427_",
-				"methodDesc": "(Lnet/minecraft/world/IWorld;Lnet/minecraft/world/level/chunk/ChunkAccess;II)V",
+				"methodDesc": "(Lnet/minecraft/world/level/StructureFeatureManager;Lnet/minecraft/world/level/chunk/ChunkAccess;II)Lnet/minecraft/world/level/chunk/ChunkAccess;",
 			},
 			"transformer": function(methodNode) {
 				var arrayLength = methodNode.instructions.size();
@@ -465,24 +466,24 @@ function initializeCoreMod() {
 				var patchedZ = false;
 				for (var i = 0; i < arrayLength; i++) {
 					var instruction = methodNode.instructions.get(i);
-					if (instruction.getOpcode() == INVOKEVIRTUAL && instruction.owner.equals("net/minecraft/world/level/ChunkPos") &&
-						instruction.name.equals(ASMAPI.mapMethod("m_45604_"))) {
-						xLoc = instruction.getNext().var;
-					} else if (instruction.getOpcode() == INVOKEVIRTUAL && instruction.owner.equals("net/minecraft/world/level/ChunkPos") &&
-						instruction.name.equals(ASMAPI.mapMethod("m_45605_"))) {
-						zLoc = instruction.getNext().var;
-					} else if (!patchedX && instruction.getOpcode() == ALOAD && xLoc == instruction.var) {
+					if (instruction.getOpcode() == INVOKEVIRTUAL && instruction.owner.equals("net/minecraft/world/level/chunk/ChunkGenerator") &&
+						instruction.name.equals(ASMAPI.mapMethod("m_151754_"))) {
+						var local = instruction.getPrevious().var;
 						var list = new InsnList();
-						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetXM", "()I", false));
+						list.add(new TypeInsnNode(NEW, "net/minecraft/world/level/ChunkPos"));
+						list.add(new InsnNode(DUP));
+						list.add(new VarInsnNode(ALOAD, local));
+						list.add(new FieldInsnNode(GETFIELD, "net/minecraft/world/level/ChunkPos", ASMAPI.mapField("f_45578_"), "I"));
+						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetX", "()I", false));
 						list.add(new InsnNode(IADD));
-						methodNode.instructions.insert(instruction, list);
-						foundX = true;
-					} else if (!patchedZ && instruction.getOpcode() == ALOAD && zLoc == instruction.var) {
-						var list = new InsnList();
-						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetZM", "()I", false));
+						list.add(new VarInsnNode(ALOAD, local));
+						list.add(new FieldInsnNode(GETFIELD, "net/minecraft/world/level/ChunkPos", ASMAPI.mapField("f_45579_"), "I"));
+						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetZ", "()I", false));
 						list.add(new InsnNode(IADD));
-						methodNode.instructions.insert(instruction, list);
-						foundZ = true;
+						list.add(new MethodInsnNode(INVOKESPECIAL, "net/minecraft/world/level/ChunkPos", "<init>", "(II)V", false));
+						methodNode.instructions.insertBefore(instruction, list);
+						methodNode.instructions.remove(instruction);
+						break;
 					}
 				}
 				return methodNode;
