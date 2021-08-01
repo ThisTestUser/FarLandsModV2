@@ -335,19 +335,6 @@ function initializeCoreMod() {
 						list.add(new InsnNode(IADD));
 						list.add(new VarInsnNode(ISTORE, 4));
 						methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), list);
-					} else if (methodNode.name.equals(ASMAPI.mapMethod("m_158961_"))) {
-						var list = new InsnList();
-						list.add(new VarInsnNode(ILOAD, 3));
-						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-							"getOffsetXM", "()I", false));
-						list.add(new InsnNode(IADD));
-						list.add(new VarInsnNode(ISTORE, 3));
-						list.add(new VarInsnNode(ILOAD, 5));
-						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config",
-							"getOffsetZM", "()I", false));
-						list.add(new InsnNode(IADD));
-						list.add(new VarInsnNode(ISTORE, 5));
-						methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), list);
 					}
 				});
 				return classNode;
