@@ -13,7 +13,6 @@ function initializeCoreMod() {
 	INVOKESTATIC = Opcodes.INVOKESTATIC;
 	INVOKEVIRTUAL = Opcodes.INVOKEVIRTUAL;
 	INVOKESPECIAL = Opcodes.INVOKESPECIAL;
-	INVOKEINTERFACE = Opcodes.INVOKEINTERFACE;
 	GETFIELD = Opcodes.GETFIELD;
 	ALOAD = Opcodes.ALOAD;
 	ILOAD = Opcodes.ILOAD;
@@ -396,9 +395,9 @@ function initializeCoreMod() {
 				var arrayLength = methodNode.instructions.size();
 				for (var i = 0; i < arrayLength; i++) {
 					var instruction = methodNode.instructions.get(i);
-					if (instruction.getOpcode() == INVOKEINTERFACE && instruction.owner.equals("net/minecraft/world/level/chunk/ChunkAccess") &&
-						instruction.name.equals(ASMAPI.mapMethod("m_7697_"))) {
-						var local = instruction.getNext().var;
+					if (instruction.getOpcode() == INVOKEVIRTUAL && instruction.owner.equals("net/minecraft/world/level/ChunkPos") &&
+						instruction.name.equals(ASMAPI.mapMethod("m_45605_"))) {
+						var local = instruction.getPrevious().var;
 						var list = new InsnList();
 						list.add(new TypeInsnNode(NEW, "net/minecraft/world/level/ChunkPos"));
 						list.add(new InsnNode(DUP));
@@ -412,7 +411,7 @@ function initializeCoreMod() {
 						list.add(new InsnNode(IADD));
 						list.add(new MethodInsnNode(INVOKESPECIAL, "net/minecraft/world/level/ChunkPos", "<init>", "(II)V", false));
 						list.add(new VarInsnNode(ASTORE, local));
-						methodNode.instructions.insert(instruction.getNext(), list);
+						methodNode.instructions.insert(instruction, list);
 						break;
 					}
 				}
