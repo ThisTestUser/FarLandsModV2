@@ -484,6 +484,45 @@ function initializeCoreMod() {
 				}
 				return methodNode;
 			}
+		},
+		"StructureGenerator": {
+			"target": {
+				"type": "METHOD",
+				"class": "net.minecraft.world.level.chunk.ChunkGenerator",
+				"methodName": "m_62199_",
+				"methodDesc": "(Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/level/StructureFeatureManager;"
+					+ "Lnet/minecraft/world/level/chunk/ChunkAccess;Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureManager;J)V",
+			},
+			"transformer": function(methodNode) {
+				var arrayLength = methodNode.instructions.size();
+				for (var i = 0; i < arrayLength; i++) {
+					var instruction = methodNode.instructions.get(i);
+					if (instruction.getOpcode() == INVOKEVIRTUAL && instruction.owner.equals("net/minecraft/world/level/biome/BiomeSource") &&
+						instruction.name.equals(ASMAPI.mapMethod("m_151754_"))) {
+						var callInsn = instruction.getPrevious();
+						var localInsn = instruction.getPrevious().getPrevious();
+						var list = new InsnList();
+						list.add(new TypeInsnNode(NEW, "net/minecraft/world/level/ChunkPos"));
+						list.add(new InsnNode(DUP));
+						list.add(localInsn.clone(null));
+						list.add(callInsn.clone(null));
+						list.add(new FieldInsnNode(GETFIELD, "net/minecraft/world/level/ChunkPos", ASMAPI.mapField("f_45578_"), "I"));
+						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetX", "()I", false));
+						list.add(new InsnNode(IADD));
+						list.add(localInsn.clone(null));
+						list.add(callInsn.clone(null));
+						list.add(new FieldInsnNode(GETFIELD, "net/minecraft/world/level/ChunkPos", ASMAPI.mapField("f_45579_"), "I"));
+						list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "getOffsetZ", "()I", false));
+						list.add(new InsnNode(IADD));
+						list.add(new MethodInsnNode(INVOKESPECIAL, "net/minecraft/world/level/ChunkPos", "<init>", "(II)V", false));
+						methodNode.instructions.insertBefore(instruction, list);
+						methodNode.instructions.remove(callInsn);
+						methodNode.instructions.remove(localInsn);
+						break;
+					}
+				}
+				return methodNode;
+			}
 		}
 	};
 }
