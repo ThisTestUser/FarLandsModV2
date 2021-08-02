@@ -395,8 +395,8 @@ function initializeCoreMod() {
 				var arrayLength = methodNode.instructions.size();
 				for (var i = 0; i < arrayLength; i++) {
 					var instruction = methodNode.instructions.get(i);
-					if (instruction.getOpcode() == INVOKEVIRTUAL && instruction.owner.equals("net/minecraft/world/level/ChunkPos") &&
-						instruction.name.equals(ASMAPI.mapMethod("m_45605_"))) {
+					if (instruction.getOpcode() == INVOKEVIRTUAL && instruction.owner.equals("net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator") &&
+						instruction.name.equals(ASMAPI.mapMethod("m_158396_"))) {
 						var local = instruction.getPrevious().var;
 						var list = new InsnList();
 						list.add(new TypeInsnNode(NEW, "net/minecraft/world/level/ChunkPos"));
@@ -411,7 +411,7 @@ function initializeCoreMod() {
 						list.add(new InsnNode(IADD));
 						list.add(new MethodInsnNode(INVOKESPECIAL, "net/minecraft/world/level/ChunkPos", "<init>", "(II)V", false));
 						list.add(new VarInsnNode(ASTORE, local));
-						methodNode.instructions.insert(instruction, list);
+						methodNode.instructions.insert(instruction.getNext(), list);
 						break;
 					}
 				}
