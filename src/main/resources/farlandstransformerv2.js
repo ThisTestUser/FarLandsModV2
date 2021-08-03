@@ -23,6 +23,7 @@ function initializeCoreMod() {
 	ISHL = Opcodes.ISHL;
 	NEW = Opcodes.NEW;
 	DUP = Opcodes.DUP;
+	IRETURN = Opcodes.IRETURN;
 
 	return {
 		"NewNoiseOcto": {
@@ -518,6 +519,49 @@ function initializeCoreMod() {
 						methodNode.instructions.remove(callInsn);
 						methodNode.instructions.remove(localInsn);
 						break;
+					}
+				}
+				return methodNode;
+			}
+		},
+		"Aquifer": {
+			"target": {
+				"type": "METHOD",
+				"class": "net.minecraft.world.level.levelgen.Aquifer$NoiseBasedAquifer",
+				"methodName": "m_158027_",
+				"methodDesc": "(III)I",
+			},
+			"transformer": function(methodNode) {
+				var lastInsn = methodNode.instructions.getLast();
+				while (lastInsn.getOpcode() != IRETURN) {
+					lastInsn = lastInsn.getPrevious();
+				}
+				var list = new InsnList();
+				list.add(new VarInsnNode(ALOAD, 0));
+				list.add(new FieldInsnNode(GETFIELD, "net/minecraft/world/level/levelgen/Aquifer$NoiseBasedAquifer", ASMAPI.mapField("f_157999_"), "[J"));
+				list.add(new MethodInsnNode(INVOKESTATIC, "com/thistestuser/farlands/Config", "fixAquiferOverflow", "(I[J)I", false));
+				methodNode.instructions.insertBefore(lastInsn, list);
+				return methodNode;
+			}
+		},
+		"NoiseSampler": {
+			"target": {
+				"type": "METHOD",
+				"class": "net.minecraft.world.level.levelgen.NoiseSamplingSettings",
+				"methodName": "<clinit>",
+				"methodDesc": "()V",
+			},
+			"transformer": function(methodNode) {
+				var double_ldc = new LdcInsnNode(0.5);
+				var arrayLength = methodNode.instructions.size();
+				for (var i = 0; i < arrayLength; i++) {
+					var instruction = methodNode.instructions.get(i);
+					if (instruction.getOpcode() == LDC && instruction.cst.getClass() == double_ldc.cst.getClass()
+						&& instruction.cst == 0.001) {
+						methodNode.instructions.set(instruction, new LdcInsnNode(0.000000000001));
+					} else if (instruction.getOpcode() == LDC && instruction.cst.getClass() == double_ldc.cst.getClass()
+						&& instruction.cst == 1000) {
+						methodNode.instructions.set(instruction, new LdcInsnNode(1000000000000));
 					}
 				}
 				return methodNode;

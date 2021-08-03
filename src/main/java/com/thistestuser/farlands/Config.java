@@ -251,4 +251,11 @@ public class Config
 	{
 		return instance.offset ? instance.offsetZ : 0;
 	}
+	
+	public static int fixAquiferOverflow(int value, long[] array)
+	{
+		if(value < 0)
+			return 0;
+		return Math.min(value, array.length - 1);
+	}
 }
