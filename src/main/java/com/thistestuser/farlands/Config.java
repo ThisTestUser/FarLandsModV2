@@ -29,6 +29,11 @@ public class Config
 	private int offsetZ = 0;
 	
 	/**
+	 * Should we fill aquifers? This will flood all cave systems below sea level.
+	 */
+	private boolean fillAquifers = false;
+	
+	/**
 	 * The location of the config file. It is currently located at %mc_dir%/config/farlandsmod.cfg.
 	 */
 	private static final File config = new File("config/farlandsmod.cfg");
@@ -70,6 +75,8 @@ public class Config
 					 offsetX = args.length == 1 ? 0 : parseInt(args[1], "offsetX");
 				 else if(args[0].equalsIgnoreCase("offsetZ"))
 					 offsetZ = args.length == 1 ? 0 : parseInt(args[1], "offsetZ");
+				 else if(args[0].equalsIgnoreCase("fillAquifers"))
+					 fillAquifers = args.length == 1 ? false : args[1].equalsIgnoreCase("true");
 			 }
 			 reader.close();
 		}catch(Exception e)
@@ -101,6 +108,10 @@ public class Config
 			writer.println("#Do not put values outside of the integer limit (-2147483648 to 2147483647)!");
 			writer.println("offsetX:" + offsetX);
 			writer.println("offsetZ:" + offsetZ);
+			writer.println("#Should we fill aquifers? This will flood all cave systems below sea level.");
+			writer.println("#This is needed to prevent crashes in 1.18+!");
+			writer.println("#Note: Because of a bug, aquifers will be flooded after 33 million blocks regardless of this option");
+			writer.println("fillAquifers:" + fillAquifers);
 			writer.close();
 		}catch(Exception e)
 		{
@@ -254,7 +265,7 @@ public class Config
 	
 	public static int fixAquiferOverflow(int value, long[] array)
 	{
-		if(value < 0)
+		if(value < 0 || instance.fillAquifers)
 			return 0;
 		return Math.min(value, array.length - 1);
 	}

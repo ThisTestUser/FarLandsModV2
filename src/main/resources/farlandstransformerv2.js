@@ -33,7 +33,7 @@ function initializeCoreMod() {
 			},
 			"transformer": function(classNode) {
 				classNode.methods.forEach(function(methodNode) {
-					if (methodNode.desc === "(IIIDDDD)D") {
+					if (methodNode.desc === "(IIIDDDD)D" || methodNode.desc === "(III)D") {
 						var pass = false;
 						var arrayLength = methodNode.instructions.size();
 						for (var i = 0; i < arrayLength; i++) {
