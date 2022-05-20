@@ -99,7 +99,7 @@ public class Config
 			writer.println("farlands:" + isFarLands);
 			writer.println("#Should we extend the world border?");
 			writer.println("extendwb:" + extendWB);
-			writer.println("#Should we offset the terrain?");
+			writer.println("#Should we offset the terrain? This works up to 1.17.1 only.");
 			writer.println("#offestX and offsetZ will not do anything if this is false");
 			writer.println("#Terrain features will have some differences when compared to the original terrain");
 			writer.println("offset:" + offset);
@@ -109,7 +109,7 @@ public class Config
 			writer.println("offsetX:" + offsetX);
 			writer.println("offsetZ:" + offsetZ);
 			writer.println("#Should we fill aquifers? This will flood all cave systems below sea level.");
-			writer.println("#This is needed to prevent crashes in 1.18+!");
+			writer.println("#This is needed from 1.18 to 1.18.1. In 1.18.2, this is not needed, and will sometimes crash your game if you use it.");
 			writer.println("#Note: Because of a bug, aquifers will be flooded after 33 million blocks regardless of this option");
 			writer.println("fillAquifers:" + fillAquifers);
 			writer.close();
