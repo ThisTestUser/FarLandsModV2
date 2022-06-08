@@ -109,7 +109,7 @@ public class Config
 			writer.println("offsetX:" + offsetX);
 			writer.println("offsetZ:" + offsetZ);
 			writer.println("#Should we fill aquifers? This will flood all cave systems below sea level.");
-			writer.println("#This is needed from 1.18 to 1.18.1. In 1.18.2, this is not needed, and will sometimes crash your game if you use it.");
+			writer.println("#This is needed from 1.18 to 1.18.1. For versions including and above 1.18.2, leave this off, as it may crash your game.");
 			writer.println("#Note: Because of a bug, aquifers will be flooded after 33 million blocks regardless of this option");
 			writer.println("fillAquifers:" + fillAquifers);
 			writer.close();
